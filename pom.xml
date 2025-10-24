@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.eclipse.jakarta</groupId>
+    <artifactId>jakartaee-app-web</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+    
+    <name>Jakarta EE Shopping Cart</name>
+    
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+    </properties>
+    
+    <dependencies>
+        <!-- Jakarta EE API (provided by WildFly) -->
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>8.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <!-- JSF API (provided by WildFly) -->
+        <dependency>
+            <groupId>org.jboss.spec.javax.faces</groupId>
+            <artifactId>jboss-jsf-api_2.3_spec</artifactId>
+            <version>3.0.0.SP07</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <!-- Servlet API (provided by WildFly) -->
+        <dependency>
+            <groupId>org.jboss.spec.javax.servlet</groupId>
+            <artifactId>jboss-servlet-api_4.0_spec</artifactId>
+            <version>2.0.0.Final</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <finalName>jakartaee-app-web</finalName>
+        <plugins>
+            <!-- Maven Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+            
+            <!-- Maven WAR Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.2</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+            
+            <!-- WildFly Maven Plugin -->
+            <plugin>
+  <groupId>org.wildfly.plugins</groupId>
+  <artifactId>wildfly-maven-plugin</artifactId>
+  <version>5.0.0.Final</version> <!-- o la más reciente -->
+</plugin>
+
+        </plugins>
+    </build>
+</project>

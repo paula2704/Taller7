@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+    <title>Mi Carrito de Compras</title>
+    <h:outputStylesheet name="css/style.css"/>
+</h:head>
+<h:body>
+    <div class="container">
+        <div class="header">
+            <h1>🛒 Mi Carrito</h1>
+            <div class="nav">
+                <h:link value="Volver a Productos" outcome="index" styleClass="nav-link"/>
+                <h:link value="Gestión" outcome="gestion" styleClass="nav-link"/>
+            </div>
+        </div>
+        
+        <h:messages globalOnly="true" styleClass="messages" infoClass="info" errorClass="error" warnClass="warn"/>
+        
+        <h:form id="carritoForm">
+            <h:panelGroup rendered="#{empty cartBean.items}">
+                <div class="empty-cart">
+                    <div class="empty-icon">🛒</div>
+                    <h2>Tu carrito está vacío</h2>
+                    <p>¡Agrega productos para comenzar a comprar!</p>
+                    <h:link value="Ir a comprar" outcome="index" styleClass="btn btn-primary"/>
+                </div>
+            </h:panelGroup>
+            
+            <h:panelGroup rendered="#{not empty cartBean.items}">
+                <div class="cart-container">
+                    <h:dataTable value="#{cartBean.items}" var="item" styleClass="cart-table" 
+                                 headerClass="cart-header" rowClasses="cart-row-odd,cart-row-even">
+                        <h:column>
+                            <f:facet name="header">Producto</f:facet>
+                            <div class="product-info">
+                                <strong>#{item.producto.nombre}</strong><br/>
+                                <small>#{item.producto.descripcion}</small>
+                            </div>
+                        </h:column>
+                        
+                        <h:column>
+                            <f:facet name="header">Precio Unit.</f:facet>
+                            <span class="price">$<h:outputText value="#{item.producto.precio}">
+                                <f:convertNumber type="number" maxFractionDigits="2" minFractionDigits="2"/>
+                            </h:outputText></span>
+                        </h:column>
+                        
+                        <h:column>
+                            <f:facet name="header">Cantidad</f:facet>
+                            <div class="quantity-control">
+                                <h:commandButton value="-" 
+                                               action="#{cartBean.actualizarCantidad(item, item.cantidad - 1)}"
+                                               styleClass="btn-small btn-minus"
+                                               disabled="#{item.cantidad <= 1}">
+                                    <f:ajax execute="@form" render="@form"/>
+                                </h:commandButton>
+                                <span class="quantity">#{item.cantidad}</span>
+                                <h:commandButton value="+" 
+                                               action="#{cartBean.actualizarCantidad(item, item.cantidad + 1)}"
+                                               styleClass="btn-small btn-plus"
+                                               disabled="#{item.cantidad >= item.producto.stock}">
+                                    <f:ajax execute="@form" render="@form"/>
+                                </h:commandButton>
+                            </div>
+                            <small class="stock-info">Stock: #{item.producto.stock}</small>
+                        </h:column>
+                        
+                        <h:column>
+                            <f:facet name="header">Subtotal</f:facet>
+                            <span class="subtotal">$<h:outputText value="#{item.subtotal}">
+                                <f:convertNumber type="number" maxFractionDigits="2" minFractionDigits="2"/>
+                            </h:outputText></span>
+                        </h:column>
+                        
+                        <h:column>
+                            <f:facet name="header">Acción</f:facet>
+                            <h:commandButton value="🗑️ Eliminar" 
+                                           action="#{cartBean.eliminarDelCarrito(item)}"
+                                           styleClass="btn btn-danger btn-delete"
+                                           title="Eliminar producto">
+                                <f:ajax execute="@form" render="@form"/>
+                            </h:commandButton>
+                        </h:column>
+                    </h:dataTable>
+                    
+                    <div class="cart-summary">
+                        <h3>Resumen del Pedido</h3>
+                        <div class="summary-line">
+                            <span>Total de artículos:</span>
+                            <span class="summary-value">#{cartBean.cantidadItems}</span>
+                        </div>
+                        <div class="summary-line total-line">
+                            <span>Total a pagar:</span>
+                            <span class="summary-total">$<h:outputText value="#{cartBean.total}">
+                                <f:convertNumber type="number" maxFractionDigits="2" minFractionDigits="2"/>
+                            </h:outputText></span>
+                        </div>
+                        
+                        <div class="cart-actions">
+                            <h:commandButton value="🗑️ Vaciar Carrito" 
+                                           action="#{cartBean.vaciarCarrito()}"
+                                           styleClass="btn btn-secondary"
+                                           onclick="return confirm('¿Está seguro de vaciar el carrito?');">
+                                <f:ajax execute="@form" render="@form"/>
+                            </h:commandButton>
+                            <h:commandButton value="✓ Finalizar Compra" 
+                                           styleClass="btn btn-success"
+                                           onclick="alert('Funcionalidad en desarrollo'); return false;"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </h:form>
+    </div>
+</h:body>
+</html>
